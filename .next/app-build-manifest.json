@@ -15,6 +15,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/pricing/page.js"
+    ],
+    "/waitlist/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/waitlist/page.js"
+    ],
+    "/pay/[slug]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/pay/[slug]/page.js"
     ]
   }
 }

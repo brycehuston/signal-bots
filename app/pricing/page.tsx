@@ -140,6 +140,72 @@ export default function PricingPage() {
           </CardBody>
         </Card>
       </div>
+
+{/* Alpha Bot Tile */}
+<div className="mt-12">
+  <Card className="relative overflow-hidden border border-amber-400/40 shadow-[0_0_80px_rgba(251,191,36,0.08)]">
+    <CardBody className="space-y-6 text-center">
+      {/* spark icon */}
+      <svg
+        viewBox="0 0 24 24"
+        className="mx-auto h-8 w-8 text-amber-300"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          fill="currentColor"
+          fillOpacity="0.12"
+        />
+      </svg>
+
+      {/* headline + subline */}
+      <div>
+  <h2
+    className="text-5xl font-extrabold tracking-tight 
+           rounded-lg px-4 py-2 
+           bg-gradient-to-r from-gray-200 via-gray-400 to-gray-600 
+           bg-clip-text text-transparent 
+           bg-black"
+  >
+    ALPHA BOT
+  </h2>
+        <p className=" text-white text-md tracking-wide mt-1">(Coming Soon)</p>
+      </div>
+
+      {/* description */}
+      <p className="mx-auto max-w-2xl text-white/85">
+        A hands-free auto-trader that hunts high-probability setups, sizes risk,
+        and manages exits for you—while you do anything else.
+      </p>
+
+      {/* compact feature list */}
+      <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-white/80">
+        <span className="inline-block">Auto entries + SL/TP</span>
+        <span className="opacity-30">•</span>
+        <span className="inline-block">Strict EMA / RSI / Volume / Trend</span>
+        <span className="opacity-30">•</span>
+        <span className="inline-block">Breakeven &amp; trailing stops</span>
+        <span className="opacity-30">•</span>
+        <span className="inline-block">24/7 Telegram alerts</span>
+      </div>
+
+      {/* centered button (only as wide as content) */}
+      <div className="flex justify-center">
+        <Button
+          size="lg"
+          href="/waitlist"
+          className="bg-amber-400 hover:bg-amber-300 text-black font-semibold shadow-lg shadow-amber-500/30 px-8"
+        >
+          Join Waitlist
+        </Button>
+      </div>
+    </CardBody>
+  </Card>
+</div>
+
     </div>
   );
 }
