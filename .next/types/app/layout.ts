@@ -1,4 +1,4 @@
-// File: C:\Projects\saas_hub\hub-frontend\app\layout.tsx
+// File: C:\Projects\signal_bot\hub-frontend\app\layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

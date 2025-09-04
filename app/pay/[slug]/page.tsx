@@ -3,24 +3,32 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { PLANS, BUNDLE } from "@/lib/plans";
 
-type Props = {
-  params: { slug: string }; // ✅ plain object
-  searchParams?: { period?: "monthly" | "annual" };
-};
+// IMPORTANT:
+// - Do NOT import or reference a `PageProps` type here.
+// - Make this component `async` and normalize `params` in case some setups
+//   present it as a Promise at type-check time.
 
-export default function PayPage({ params, searchParams }: Props) {
-  const { slug } = params;
+export default async function PayPage({
+  params,
+  searchParams,
+}: {
+  params: any; // ← intentionally loose to avoid PageProps constraint
+  searchParams?: { period?: string };
+}) {
+  // Normalize params whether it's a plain object or a Promise-like
+  const resolved = await Promise.resolve(params);
+  const slug: string = resolved?.slug;
+
   const period = searchParams?.period === "annual" ? "annual" : "monthly";
 
   const allPlans = [...PLANS, BUNDLE];
   const plan = allPlans.find((p) => p.slug === slug);
   if (!plan) return notFound();
 
-  const price =
-    period === "annual" ? plan.priceAnnual : plan.priceMonthly;
+  const price = period === "annual" ? plan.priceAnnual : plan.priceMonthly;
 
   const chain = "Solana";
-  const token = "USDC"; // or SOL if that’s what you’re accepting
+  const token = "USDC"; // or "SOL" if you take SOL
   const address =
     process.env.NEXT_PUBLIC_SOLANA_ADDRESS ||
     "YOUR_SOL_OR_USDC_ADDRESS_HERE";
