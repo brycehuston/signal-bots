@@ -7,7 +7,7 @@ export default function Page() {
       <section className="grid md:grid-cols-2 gap-8 items-center">
         <div>
           <h1 className="text-5xl font-bold leading-tight mb-4">
-            Trade faster with{" "}
+            Trade Faster With{" "}
             <span className="text-brand-500">Crypto Signal Scanner</span>
           </h1>
           <p className="text-white/70 mb-6">
