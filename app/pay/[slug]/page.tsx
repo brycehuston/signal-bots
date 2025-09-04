@@ -1,83 +1,90 @@
 // app/pay/[slug]/page.tsx
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { PLANS, BUNDLE } from "@/lib/plans";
 
-function getPlan(slug: string) {
-  const all = [...PLANS, BUNDLE];
-  return all.find((p) => p.slug === slug);
-}
+type Props = {
+  params: { slug: string }; // ✅ plain object
+  searchParams?: { period?: "monthly" | "annual" };
+};
 
-export default function PayPage({ params, searchParams }: { params: { slug: string }; searchParams: { period?: string } }) {
-  const plan = getPlan(params.slug);
+export default function PayPage({ params, searchParams }: Props) {
+  const { slug } = params;
+  const period = searchParams?.period === "annual" ? "annual" : "monthly";
+
+  const allPlans = [...PLANS, BUNDLE];
+  const plan = allPlans.find((p) => p.slug === slug);
   if (!plan) return notFound();
 
-  const period = (searchParams.period === "annual" ? "annual" : "monthly") as "monthly" | "annual";
-  const amount = period === "annual" ? plan.priceAnnual : plan.priceMonthly;
+  const price =
+    period === "annual" ? plan.priceAnnual : plan.priceMonthly;
 
-  const address = process.env.NEXT_PUBLIC_SOL_USDC_ADDRESS || "YOUR_SOLANA_USDC_ADDRESS";
-  const network = "Solana";
-  const token = "USDC";
+  const chain = "Solana";
+  const token = "USDC"; // or SOL if that’s what you’re accepting
+  const address =
+    process.env.NEXT_PUBLIC_SOLANA_ADDRESS ||
+    "YOUR_SOL_OR_USDC_ADDRESS_HERE";
 
   return (
-    <div className="max-w-2xl space-y-6">
-      <div>
-        <div className="text-sm text-white/60">Plan</div>
-        <h1 className="text-2xl font-semibold mt-1 flex items-center gap-2">
-          <span className="text-xl">{plan.emoji}</span> {plan.title} — {period === "annual" ? "Annual" : "Monthly"}
-        </h1>
-        <div className="mt-1 text-white/70">Amount due: <b>${amount}</b> in {token} on {network}.</div>
-      </div>
+    <div className="mx-auto max-w-2xl py-10 px-5">
+      <h1 className="text-2xl font-semibold tracking-tight">
+        Subscribe — <span className="opacity-70">{plan.title}</span>
+      </h1>
+      <p className="mt-2 text-white/70">
+        You selected <span className="font-medium">{period}</span> billing.
+      </p>
 
-      <div className="rounded-2xl border border-edge bg-card/80 p-6 shadow-glow">
-        <h2 className="text-lg font-semibold">How to pay</h2>
-        <ol className="mt-3 space-y-2 text-white/80 text-sm">
-          <li>1) Send <b>{amount} {token}</b> on <b>{network}</b> to the address below.</li>
-          <li>2) Paste your transaction link or signature.</li>
-          <li>3) We’ll verify and DM you the private Telegram group invite.</li>
-        </ol>
-
-        <div className="mt-5">
-          <div className="text-sm text-white/60 mb-1">Payment address (USDC on Solana)</div>
-          <div className="rounded-xl border border-edge/70 bg-white/5 p-3 break-all">
-            {address}
-          </div>
+      <div className="mt-6 rounded-2xl border border-edge bg-card/80 p-6 shadow-glow">
+        <div className="text-lg font-semibold">
+          {plan.emoji} {plan.title}
+        </div>
+        <div className="mt-1 text-white/60">
+          Price: <span className="text-white font-medium">${price}</span> /{" "}
+          {period === "annual" ? "year" : "month"}
         </div>
 
-        <form
-          className="mt-5 grid gap-3"
-          onSubmit={(e) => {
-            e.preventDefault();
-            alert("Thanks! Submit captured. (Wire this up to your backend to save/notify.)");
-          }}
-        >
-          <label className="text-sm text-white/70">
-            Transaction link or signature
-            <input
-              required
-              name="tx"
-              placeholder="https://solscan.io/tx/…  or  5w3…txSig"
-              className="mt-1 w-full rounded-xl border border-edge/70 bg-white/5 px-3 py-2 outline-none focus:ring-2 focus:ring-brand-600"
-            />
-          </label>
+        <div className="mt-6 space-y-3 text-sm">
+          <p className="text-white/80">
+            1) Send <span className="font-semibold">${price} {token}</span> on{" "}
+            <span className="font-semibold">{chain}</span> to:
+          </p>
+          <div className="rounded-lg border border-edge bg-black/30 p-3 font-mono text-white/90 break-all">
+            {address}
+          </div>
 
-          <label className="text-sm text-white/70">
-            Your Telegram @username
-            <input
-              required
-              name="tg"
-              placeholder="@yourhandle"
-              className="mt-1 w-full rounded-xl border border-edge/70 bg-white/5 px-3 py-2 outline-none focus:ring-2 focus:ring-brand-600"
-            />
-          </label>
+          <p className="text-white/80">
+            2) In the transaction memo (if available), include your email:{" "}
+            <span className="font-mono">{`<your@email>`}</span>.
+          </p>
 
-          <button className="inline-flex h-10 items-center justify-center rounded-xl bg-brand-600 px-4 text-slate-900 font-semibold hover:bg-brand-500">
-            Submit for verification
-          </button>
-        </form>
+          <p className="text-white/80">
+            3) After confirmation, send the{" "}
+            <span className="font-medium">TX link or screenshot</span> to our
+            Telegram or email. We’ll reply with your private Telegram invite.
+          </p>
+
+          <div className="mt-4">
+            <Link
+              href="/pricing"
+              className="inline-flex h-10 items-center rounded-xl bg-white/5 px-4 text-white hover:bg-white/10"
+            >
+              Back to pricing
+            </Link>
+          </div>
+        </div>
       </div>
 
-      <div className="text-sm text-white/55">
-        Need help? DM support on Telegram after you send: <b>@your_support_name</b>.
+      <div className="mt-8 rounded-2xl border border-edge/60 bg-white/5 p-4 text-sm text-white/70">
+        <p className="font-medium text-white/80">What happens next?</p>
+        <ul className="mt-2 list-disc pl-5 space-y-1">
+          <li>We verify the payment on-chain.</li>
+          <li>
+            You’ll receive a private Telegram link for{" "}
+            <span className="font-medium">{plan.title}</span>.
+          </li>
+          <li>For bundles, you’ll get invites to all included channels.</li>
+          <li>Renewals: just repeat the same payment when due.</li>
+        </ul>
       </div>
     </div>
   );
